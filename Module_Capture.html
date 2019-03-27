@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Capture d'image</title>   
+
+    <style>
+     canvas{
+     }
+     button{
+        margin-left: 300px;
+     }
+    </style>
+</head>
+<body>
+    <video controls width="400" height="400" id="V1">
+        <source></source>
+    </video>
+
+    <canvas id="C1"></canvas>
+
+    <p></p>
+
+    <button id="b1" ><a href="#"><img src="camara.png" width="50" height="50"></a></img></button> 
+    <button id="b2" ><a  href="#" download="capture" id="link">
+        <img src="download.png" width="50" height="50">
+      </a></button>
+
+    <script>
+
+var count = 3; 
+
+        function setup() {
+            this.canvas=document.querySelector('#C1')
+            this.video=document.querySelector('#V1');
+            this.buton=document.querySelector('#b1')
+            this.buton2=document.querySelector('#b2')
+            this.ctx=this.canvas.getContext('2d')
+            this.canvas.width=this.video.width
+            this.canvas.height=this.video.height
+            display_camera()
+            this.video.addEventListener('play', _ => {
+                this.buton.addEventListener('click',_ => {
+                    anim();
+                })
+                this.buton2.addEventListener('click',_ => {
+                    download();
+                })
+            })
+        }
+
+    async function display_camera() {
+        this.video=document.querySelector('#V1');
+            let stream 
+            try {
+               stream = await navigator.mediaDevices.getUserMedia({video: true})
+                this.video.srcObject = stream
+            } catch (error) {
+                console.log(error)
+            }
+    }   
+    
+
+    function take_image() {
+    this.ctx.drawImage(this.video,0,0,this.canvas.width,this.canvas.height)
+    }
+    
+function anim() {
+    if (count >= 0) {
+        this.ctx.font = "30px Arial"
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+        this.ctx.fillText('. . . '+count,this.canvas.width/2,this.canvas.height/2)
+        count--;
+        setTimeout(anim, 1000);
+    }
+    else {
+        take_image()
+    }
+}
+
+function download(){
+    //convert canvas content to Base64 
+    this.imgBase64=this.canvas.toDataURL()
+    this.image=new Image()
+    this.image.src=this.imgBase64
+    //le button download permet d'afficher le contenu de l'image en format Base64
+    console.log(this.image)
+}
+ 
+    setup()
+    
+    </script>
+</body>
+</html>
