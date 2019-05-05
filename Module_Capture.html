@@ -9,7 +9,7 @@
      canvas{
      }
      button{
-        margin-left: 300px;
+        margin-left: 150px;
      }
 
      label{
@@ -21,47 +21,56 @@
     </style>
 </head>
 <body>
-    <video controls width="400" height="400" id="V1">
+        <canvas id="C1"></canvas>
+
+    <video controls width="400" height="400" id="V1" style="border: 1px solid black" autoplay>
         <source></source>
     </video>
 
-    <canvas id="C1"></canvas>
-
     <p></p>
-
-    <button id="b1" ><a href="#"><img src="camara.png" width="50" height="50"></a></img></button> 
-    <button id="b2" ><a  href="#" download="capture" id="link">
-        <img src="download.png" width="50" height="50"><br>64
+    
+    <button id="couper" ><a href="#"><img src="couper.png" width="40" height="40"></a></img></button> 
+    <button id="b3" ><a  href="#" id="save" onclick="save()">
+            <img src="save.png" width="40" height="40">
+          </a></button > 
+    <button id="b1" ><a href="#"><img src="camara.png" width="40" height="40"></a></img></button> 
+    <button id="b2" ><a  href="#" download="capture" id="link" >
+        <img src="download.png" width="30" height="40"><br>64
       </a></button>
+       
 
       <br><br><br><br><br>
-      <div style="border: 1px solid gray">
-        <br><br>
+      <div>
+        <br>
       <label for="opacity">Opacity</label>
       <input type="range" name="opacity" min="0" max="100" step="33" value="0" id="opacity" onchange="opacity()">
 
-      <label for="scale">Scale</label>
+      <label for="scale">Contrast</label>
       <input type="range" name="scale" min="0" max="100" step="33" value="0" id="scale" onchange="scale()">
 
-      <label for="sepia">Sepia</label>
+      <label for="sepia">Luminosity</label>
       <input type="range" name="sepia" min="0" max="100" step="33" value="0" id="sepia" onchange="sepia()">
 
       <br><br>
-      <button id="b3" ><a  href="#" id="save" onclick="save()">
-            <img src="save.png" width="40" height="40">
-          </a></button >
-
-      <br><br>    
     </div>
     <script>
 
 var count = 3; 
+var img64;
+var rectHauteur=70;
+var rectLargeur=100;
+var rectX=10;
+var rectY=10;
+var isRecadrer=false;
 
         function setup() {
             this.canvas=document.querySelector('#C1')
             this.video=document.querySelector('#V1');
             this.buton=document.querySelector('#b1')
             this.buton2=document.querySelector('#b2')
+            this.couper=document.querySelector('#couper')
+            this.couper.style.display='none'
+            this.couper.style.marginLeft=0
             this.ctx=this.canvas.getContext('2d')
             this.canvas.width=this.video.width
             this.canvas.height=this.video.height
@@ -89,7 +98,13 @@ var count = 3;
     
 
     function take_image() {
-    this.ctx.drawImage(this.video,0,0,this.canvas.width,this.canvas.height)
+    this.ctx.drawImage(this.video,0,0,this.canvas.width,this.canvas.height);
+    imageExist=true
+    img64=this.canvas.toDataURL();
+    this.couper.style.display='inline'
+    this.couper.addEventListener('click',_ =>{
+        drawRect();
+    })
     }
     
 function anim() {
@@ -106,12 +121,10 @@ function anim() {
 }
 
 function download(){
-    //convert canvas content to Base64 
-    this.imgBase64=this.canvas.toDataURL()
-    this.image=new Image()
-    this.image.src=this.imgBase64
+    //convert canvas content to Base64     
+    img64=this.canvas.toDataURL()
     //le button download permet d'afficher le contenu de l'image en format Base64
-    console.log(this.image)
+    console.log(img64)
 }
  
     setup()
@@ -191,11 +204,154 @@ function download(){
     function save(){
     //convert canvas content to image jpeg 
     var canvas = document.querySelector("canvas");
-    var img    = canvas.toDataURL("image/jpeg");
-    //le button save permet d'afficher le contenu de l'image en format Base64
+    var ctx=canvas.getContext('2d')
+    if(isRecadrer){
+    var data=ctx.getImageData(rectX+8,rectY+8,rectLargeur-14,rectHauteur-14)
+    ctx.clearRect(0,0,canvas.width,canvas.height)
+    ctx.putImageData(data,canvas.width/2-rectLargeur/2,canvas.height/2-rectHauteur/2)
+    isRecadrer=false
+    } 
+    var img = canvas.toDataURL("image/jpeg");
     console.log(img)
+    //le button save permet d'afficher le contenu de l'image en format jpeg
 }
+
+
+   function drawRect(){
+    var canvas = document.getElementById("C1");
+    var ctx = canvas.getContext("2d");
+    ctx.lineWidth = 4
+    ctx.strokeRect(rectX,rectY,rectLargeur,rectHauteur)
+    /*ctx.beginPath()
+    ctx.moveTo(rectX,rectY)
+    ctx.lineTo(rectX+rectLargeur,rectY)
+    ctx.lineTo(rectX+rectLargeur,rectY+rectHauteur)
+    ctx.lineTo(rectX,rectY+rectHauteur)
+    ctx.lineTo(rectX,rectY)
+    ctx.stroke()*/
+
+    ctx.strokeRect(rectX-4,(rectY+rectHauteur-rectHauteur/2)-4,8,8)    
+    ctx.strokeRect(rectX-4,rectY-4,8,8)
+    ctx.strokeRect(rectX+rectLargeur-4,rectY+rectHauteur-rectHauteur/2-4,8,8)
+    ctx.strokeRect(rectX+rectLargeur-4,rectY+rectHauteur-4,8,8)
     
+    ctx.strokeRect(rectX-4,rectY+rectHauteur-4,8,8)
+    ctx.strokeRect(rectX+rectLargeur-rectLargeur/2-4,rectY+rectHauteur-4,8,8)
+    ctx.strokeRect(rectX+rectLargeur-4,rectY-4,8,8)
+    ctx.strokeRect(rectX+rectLargeur-rectLargeur/2-4,rectY-4,8,8)
+
+    this.couper.style.display='none'
+    isRecadrer=true;
+    this.canvas.removeEventListener('mousedown',_ =>{})
+    this.canvas.removeEventListener('mouseup',_ =>{})
+    this.canvas.removeEventListener('click',_ =>{})
+
+    rectEvent()
+   }
+
+   
+function rectEvent(){
+    var canvas = document.getElementById("C1");
+    var ctx = canvas.getContext("2d");
+   this.canvas.addEventListener('mousedown',(event)=> {
+        if((event.clientX>rectX+8) && event.clientX<(rectX+rectLargeur-8) && event.clientY>(rectY+8) && event.clientY<(rectY+rectHauteur-8)){
+                 canvas.addEventListener('mouseup',(ev)=>{
+                    if((event.clientX>rectX+8) && event.clientX<(rectX+rectLargeur-8) && event.clientY>(rectY+8) && event.clientY<(rectY+rectHauteur-8)){
+                    rectX=(ev.clientX-rectLargeur/2);
+                    rectY=(ev.clientY-rectHauteur/2);
+                    var image = new Image()
+                    image.onload = function() {
+                     ctx.clearRect(0, 0, canvas.width,canvas.height);   
+                     ctx.drawImage(image, 0, 0);
+                     drawRect();
+                    };
+                    image.src=img64
+                 }})
+        }   
+
+        else if(event.clientX>=(rectX+rectLargeur-8) && event.clientX<=(rectX+rectLargeur+8) && event.clientY>=(rectY+rectHauteur-rectHauteur/2-8) && event.clientY<=(rectY+rectHauteur-rectHauteur/2+8)){
+             canvas.addEventListener('mousemove',(e)=>{
+                if(event.clientX>=(rectX+rectLargeur-8) && event.clientX<=(rectX+rectLargeur+8) && event.clientY>=(rectY+rectHauteur-rectHauteur/2-8) && event.clientY<=(rectY+rectHauteur-rectHauteur/2+8)){
+                 canvas.addEventListener('mouseup',(ev)=>{
+                    if(event.clientX>=(rectX+rectLargeur-8) && event.clientX<=(rectX+rectLargeur+8) && event.clientY>=(rectY+rectHauteur-rectHauteur/2-8) && event.clientY<=(rectY+rectHauteur-rectHauteur/2+8)){
+                    if(ev.clientX>event.clientX)
+                    rectLargeur=rectLargeur+(ev.clientX-(rectX+rectLargeur));
+                    else
+                    rectLargeur=rectLargeur+(ev.clientX-(rectX+rectLargeur));
+                    var image = new Image()
+                    image.onload = function() {
+                     ctx.clearRect(0, 0, canvas.width,canvas.height);   
+                     ctx.drawImage(image, 0, 0);
+                     drawRect();
+                    };
+                    image.src=img64
+                 }})
+             }})
+        }  
+
+        else if(event.clientX>=(rectX-8) && event.clientX<=(rectX+8) && event.clientY>=(rectY+rectHauteur-rectHauteur/2-8) && event.clientY<=(rectY+rectHauteur-rectHauteur/2+8)){
+                 canvas.addEventListener('mouseup',(ev)=>{
+                    if(event.clientX>=(rectX-8) && event.clientX<=(rectX+8) && event.clientY>=(rectY+rectHauteur-rectHauteur/2-8) && event.clientY<=(rectY+rectHauteur-rectHauteur/2+8)){
+                    if(ev.clientX>event.clientX){
+                    rectLargeur=rectLargeur-(ev.clientX-rectX);
+                    rectX=ev.clientX;
+                }
+                else{
+                    rectLargeur=rectLargeur+Math.abs((ev.clientX-rectX));
+                    rectX=ev.clientX;
+                }
+                    var image = new Image()
+                    image.onload = function() {
+                     ctx.clearRect(0, 0, canvas.width,canvas.height);   
+                     ctx.drawImage(image, 0, 0);
+                     drawRect();
+                    };
+                    image.src=img64
+                 }})
+             
+        } 
+
+        else if(event.clientX>=(rectX+rectLargeur-rectLargeur/2-8) && event.clientX<=(rectX+rectLargeur-rectLargeur/2+8) && event.clientY>=(rectY+rectHauteur-8) && event.clientY<=(rectY+rectHauteur+8)){
+                 canvas.addEventListener('mouseup',(ev)=>{
+                    if(event.clientX>=(rectX+rectLargeur-rectLargeur/2-8) && event.clientX<=(rectX+rectLargeur-rectLargeur/2+8) && event.clientY>=(rectY+rectHauteur-8) && event.clientY<=(rectY+rectHauteur+8)){
+                    if(ev.clientY>event.clientY)
+                    rectHauteur=rectHauteur+(ev.clientY-(rectY+rectHauteur));
+                    else
+                    rectHauteur=rectHauteur-Math.abs((ev.clientY-(rectY+rectHauteur)));
+                    var image = new Image()
+                    image.onload = function() {
+                     ctx.clearRect(0, 0, canvas.width,canvas.height);   
+                     ctx.drawImage(image, 0, 0);
+                     drawRect();
+                    };
+                    image.src=img64
+             }})
+        }  
+
+        else if(event.clientX>=(rectX+rectLargeur-rectLargeur/2-8) && event.clientX<=(rectX+rectLargeur-rectLargeur/2+8) && event.clientY>=(rectY-8) && event.clientY<=(rectY+8)){
+                if(event.clientX>=(rectX+rectLargeur-rectLargeur/2-8) && event.clientX<=(rectX+rectLargeur-rectLargeur/2+8) && event.clientY>=(rectY-8) && event.clientY<=(rectY+8)){
+                 canvas.addEventListener('mouseup',(ev)=>{
+                    if(event.clientX>=(rectX+rectLargeur-rectLargeur/2-8) && event.clientX<=(rectX+rectLargeur-rectLargeur/2+8) && event.clientY>=(rectY-8) && event.clientY<=(rectY+8)){
+                    if(ev.clientY>event.clientY){
+                    rectHauteur=rectHauteur-(ev.clientY-rectY);
+                    rectY=ev.clientY;
+                }
+                    else{
+                    rectHauteur=rectHauteur+Math.abs((ev.clientY-rectY));
+                    rectY=ev.clientY;
+                }
+                    var image = new Image()
+                    image.onload = function() {
+                     ctx.clearRect(0, 0, canvas.width,canvas.height);   
+                     ctx.drawImage(image, 0, 0);
+                     drawRect();
+                    };
+                    image.src=img64
+                 }})
+             }
+        }   
+    })
+}
     </script>
 </body>
 </html>
