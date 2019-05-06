@@ -128,6 +128,7 @@ function download(){
 }
  
     setup()
+    rectEvent()
 
     function opacity() {
         var opacity=document.getElementById('opacity').value;
@@ -242,18 +243,13 @@ function download(){
 
     this.couper.style.display='none'
     isRecadrer=true;
-    this.canvas.removeEventListener('mousedown',_ =>{})
-    this.canvas.removeEventListener('mouseup',_ =>{})
-    this.canvas.removeEventListener('click',_ =>{})
-
-    rectEvent()
    }
 
    
 function rectEvent(){
     var canvas = document.getElementById("C1");
     var ctx = canvas.getContext("2d");
-   this.canvas.addEventListener('mousedown',(event)=> {
+    canvas.addEventListener('mousedown',(event)=> {
         if((event.clientX>rectX+8) && event.clientX<(rectX+rectLargeur-8) && event.clientY>(rectY+8) && event.clientY<(rectY+rectHauteur-8)){
                  canvas.addEventListener('mouseup',(ev)=>{
                     if((event.clientX>rectX+8) && event.clientX<(rectX+rectLargeur-8) && event.clientY>(rectY+8) && event.clientY<(rectY+rectHauteur-8)){
@@ -269,15 +265,13 @@ function rectEvent(){
                  }})
         }   
 
-        else if(event.clientX>=(rectX+rectLargeur-8) && event.clientX<=(rectX+rectLargeur+8) && event.clientY>=(rectY+rectHauteur-rectHauteur/2-8) && event.clientY<=(rectY+rectHauteur-rectHauteur/2+8)){
-             canvas.addEventListener('mousemove',(e)=>{
-                if(event.clientX>=(rectX+rectLargeur-8) && event.clientX<=(rectX+rectLargeur+8) && event.clientY>=(rectY+rectHauteur-rectHauteur/2-8) && event.clientY<=(rectY+rectHauteur-rectHauteur/2+8)){
+        else if(event.clientX>=(rectX+rectLargeur-8) && event.clientX<=(rectX+rectLargeur+8) && event.clientY>=(rectY+rectHauteur/2 -8) && event.clientY<=(rectY+rectHauteur/2 +8)){
                  canvas.addEventListener('mouseup',(ev)=>{
-                    if(event.clientX>=(rectX+rectLargeur-8) && event.clientX<=(rectX+rectLargeur+8) && event.clientY>=(rectY+rectHauteur-rectHauteur/2-8) && event.clientY<=(rectY+rectHauteur-rectHauteur/2+8)){
-                    if(ev.clientX>event.clientX)
+                    if(event.clientX>=(rectX+rectLargeur-8) && event.clientX<=(rectX+rectLargeur+8) && event.clientY>=(rectY+rectHauteur/2 -8) && event.clientY<=(rectY+rectHauteur/2 +8)){
+                    if(ev.clientX>=event.clientX)
                     rectLargeur=rectLargeur+(ev.clientX-(rectX+rectLargeur));
                     else
-                    rectLargeur=rectLargeur+(ev.clientX-(rectX+rectLargeur));
+                    rectLargeur=rectLargeur-((rectX+rectLargeur)-ev.clientX);
                     var image = new Image()
                     image.onload = function() {
                      ctx.clearRect(0, 0, canvas.width,canvas.height);   
@@ -286,7 +280,6 @@ function rectEvent(){
                     };
                     image.src=img64
                  }})
-             }})
         }  
 
         else if(event.clientX>=(rectX-8) && event.clientX<=(rectX+8) && event.clientY>=(rectY+rectHauteur-rectHauteur/2-8) && event.clientY<=(rectY+rectHauteur-rectHauteur/2+8)){
@@ -349,7 +342,7 @@ function rectEvent(){
                     image.src=img64
                  }})
              }
-        }   
+        } 
     })
 }
     </script>
