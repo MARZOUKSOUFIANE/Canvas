@@ -27,7 +27,7 @@ un module de capture qui permet de prendre des photos et les modifier en utilsan
 
 3- si une image est prise un bouton "couper" va être affiché et va permettre d'afficher un outline de racadrage avec des poignets          sensibles aux mouvement de la souri.
  
-   ![](outline.png) 
+   ![](outline.PNG) 
    
    => pour deplacer tout l'outline il faut cliquer deux fois sur la position que vous voulez.
    => pour ajuster la largeur ou la hauteur de l'outline il faut just cliquer sur les poignets concernés et glisser la souri soit à           droite ,à gauche,en haut  soit en bas. 
