@@ -98,6 +98,11 @@ var isRecadrer=false;
     
 
     function take_image() {
+     rectHauteur=70;
+     rectLargeur=100;
+     rectX=10;
+     rectY=10;
+     isRecadrer=false;
     this.ctx.drawImage(this.video,0,0,this.canvas.width,this.canvas.height);
     imageExist=true
     img64=this.canvas.toDataURL();
@@ -249,10 +254,7 @@ function download(){
 function rectEvent(){
     var canvas = document.getElementById("C1");
     var ctx = canvas.getContext("2d");
-    canvas.addEventListener('mousedown',(event)=> {
-        if((event.clientX>rectX+8) && event.clientX<(rectX+rectLargeur-8) && event.clientY>(rectY+8) && event.clientY<(rectY+rectHauteur-8)){
-                 canvas.addEventListener('mouseup',(ev)=>{
-                    if((event.clientX>rectX+8) && event.clientX<(rectX+rectLargeur-8) && event.clientY>(rectY+8) && event.clientY<(rectY+rectHauteur-8)){
+    canvas.addEventListener('dblclick',(ev)=> {
                     rectX=(ev.clientX-rectLargeur/2);
                     rectY=(ev.clientY-rectHauteur/2);
                     var image = new Image()
@@ -260,17 +262,17 @@ function rectEvent(){
                      ctx.clearRect(0, 0, canvas.width,canvas.height);   
                      ctx.drawImage(image, 0, 0);
                      drawRect();
-                    };
+                    }
                     image.src=img64
-                 }})
-        }   
+        })   
 
-        else if(event.clientX>=(rectX+rectLargeur-8) && event.clientX<=(rectX+rectLargeur+8) && event.clientY>=(rectY+rectHauteur/2 -8) && event.clientY<=(rectY+rectHauteur/2 +8)){
+    canvas.addEventListener('mousedown',(event)=> {  
+         if(event.clientX>=(rectX+rectLargeur-4) && event.clientX<=(rectX+rectLargeur+4) && event.clientY>=(rectY+rectHauteur/2 -4) && event.clientY<=(rectY+rectHauteur/2 +4)){
                  canvas.addEventListener('mouseup',(ev)=>{
-                    if(event.clientX>=(rectX+rectLargeur-8) && event.clientX<=(rectX+rectLargeur+8) && event.clientY>=(rectY+rectHauteur/2 -8) && event.clientY<=(rectY+rectHauteur/2 +8)){
-                    if(ev.clientX>=event.clientX)
+                    if(event.clientX>=(rectX+rectLargeur-4) && event.clientX<=(rectX+rectLargeur+4) && event.clientY>=(rectY+rectHauteur/2 -4) && event.clientY<=(rectY+rectHauteur/2 +4)){
+                    if(ev.clientX>=event.clientX && Math.abs(ev.clientY-event.clientY)<10)
                     rectLargeur=rectLargeur+(ev.clientX-(rectX+rectLargeur));
-                    else
+                    else if(ev.clientX<event.clientX && Math.abs(ev.clientY-event.clientY)<10)
                     rectLargeur=rectLargeur-((rectX+rectLargeur)-ev.clientX);
                     var image = new Image()
                     image.onload = function() {
@@ -282,14 +284,14 @@ function rectEvent(){
                  }})
         }  
 
-        else if(event.clientX>=(rectX-8) && event.clientX<=(rectX+8) && event.clientY>=(rectY+rectHauteur-rectHauteur/2-8) && event.clientY<=(rectY+rectHauteur-rectHauteur/2+8)){
+        else if(event.clientX>=(rectX-4) && event.clientX<=(rectX+4) && event.clientY>=(rectY+rectHauteur-rectHauteur/2-4) && event.clientY<=(rectY+rectHauteur-rectHauteur/2+4)){
                  canvas.addEventListener('mouseup',(ev)=>{
-                    if(event.clientX>=(rectX-8) && event.clientX<=(rectX+8) && event.clientY>=(rectY+rectHauteur-rectHauteur/2-8) && event.clientY<=(rectY+rectHauteur-rectHauteur/2+8)){
-                    if(ev.clientX>event.clientX){
+                    if(event.clientX>=(rectX-4) && event.clientX<=(rectX+4) && event.clientY>=(rectY+rectHauteur-rectHauteur/2-4) && event.clientY<=(rectY+rectHauteur-rectHauteur/2+4)){
+                    if(ev.clientX>event.clientX && Math.abs(ev.clientY-event.clientY)<10){
                     rectLargeur=rectLargeur-(ev.clientX-rectX);
                     rectX=ev.clientX;
                 }
-                else{
+                else if(ev.clientX<=event.clientX && Math.abs(ev.clientY-event.clientY)<10){
                     rectLargeur=rectLargeur+Math.abs((ev.clientX-rectX));
                     rectX=ev.clientX;
                 }
@@ -304,12 +306,12 @@ function rectEvent(){
              
         } 
 
-        else if(event.clientX>=(rectX+rectLargeur-rectLargeur/2-8) && event.clientX<=(rectX+rectLargeur-rectLargeur/2+8) && event.clientY>=(rectY+rectHauteur-8) && event.clientY<=(rectY+rectHauteur+8)){
+        else if(event.clientX>=(rectX+rectLargeur-rectLargeur/2-4) && event.clientX<=(rectX+rectLargeur-rectLargeur/2+4) && event.clientY>=(rectY+rectHauteur-4) && event.clientY<=(rectY+rectHauteur+4)){
                  canvas.addEventListener('mouseup',(ev)=>{
-                    if(event.clientX>=(rectX+rectLargeur-rectLargeur/2-8) && event.clientX<=(rectX+rectLargeur-rectLargeur/2+8) && event.clientY>=(rectY+rectHauteur-8) && event.clientY<=(rectY+rectHauteur+8)){
-                    if(ev.clientY>event.clientY)
+                    if(event.clientX>=(rectX+rectLargeur-rectLargeur/2-4) && event.clientX<=(rectX+rectLargeur-rectLargeur/2+4) && event.clientY>=(rectY+rectHauteur-4) && event.clientY<=(rectY+rectHauteur+4)){
+                    if(ev.clientY>event.clientY && Math.abs(ev.clientX-event.clientX)<10)
                     rectHauteur=rectHauteur+(ev.clientY-(rectY+rectHauteur));
-                    else
+                    else if(ev.clientY<=event.clientY && Math.abs(ev.clientX-event.clientX)<10)
                     rectHauteur=rectHauteur-Math.abs((ev.clientY-(rectY+rectHauteur)));
                     var image = new Image()
                     image.onload = function() {
@@ -321,15 +323,14 @@ function rectEvent(){
              }})
         }  
 
-        else if(event.clientX>=(rectX+rectLargeur-rectLargeur/2-8) && event.clientX<=(rectX+rectLargeur-rectLargeur/2+8) && event.clientY>=(rectY-8) && event.clientY<=(rectY+8)){
-                if(event.clientX>=(rectX+rectLargeur-rectLargeur/2-8) && event.clientX<=(rectX+rectLargeur-rectLargeur/2+8) && event.clientY>=(rectY-8) && event.clientY<=(rectY+8)){
+        else if(event.clientX>=(rectX+rectLargeur-rectLargeur/2-4) && event.clientX<=(rectX+rectLargeur-rectLargeur/2+4) && event.clientY>=(rectY-4) && event.clientY<=(rectY+4)){
                  canvas.addEventListener('mouseup',(ev)=>{
-                    if(event.clientX>=(rectX+rectLargeur-rectLargeur/2-8) && event.clientX<=(rectX+rectLargeur-rectLargeur/2+8) && event.clientY>=(rectY-8) && event.clientY<=(rectY+8)){
-                    if(ev.clientY>event.clientY){
+                    if(event.clientX>=(rectX+rectLargeur-rectLargeur/2-4) && event.clientX<=(rectX+rectLargeur-rectLargeur/2+4) && event.clientY>=(rectY-4) && event.clientY<=(rectY+4)){
+                    if(ev.clientY>event.clientY && Math.abs(ev.clientX-event.clientX)<10){
                     rectHauteur=rectHauteur-(ev.clientY-rectY);
                     rectY=ev.clientY;
                 }
-                    else{
+                    else if(ev.clientY<event.clientY && Math.abs(ev.clientX-event.clientX)<10){
                     rectHauteur=rectHauteur+Math.abs((ev.clientY-rectY));
                     rectY=ev.clientY;
                 }
@@ -343,7 +344,7 @@ function rectEvent(){
                  }})
              }
         } 
-    })
+    )
 }
     </script>
 </body>
