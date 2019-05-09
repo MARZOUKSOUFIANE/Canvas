@@ -2,7 +2,7 @@
 
 un module de capture qui permet de prendre des photos et les modifier en utilsant Canvas
 
-## le module repond aux exigences suivants:
+## le module répond aux exigences suivantes:
 
 1.Une interface pour les actions de la capture
 
@@ -19,7 +19,7 @@ un module de capture qui permet de prendre des photos et les modifier en utilsan
 8.Enregistrement de l’image recadrer
 
 
-## comment utiliser ce module.
+## comment utiliser ce module:
 
 1- le module utilise automatiquement le camera de votre machine pour filmer , et dès que vous cliquer sur le boutons "camera" une image    va être prise et affichée dans la page
 
@@ -35,4 +35,5 @@ un module de capture qui permet de prendre des photos et les modifier en utilsan
 5- en plus de ça et dans le bas de la page il y'a trois zones de types range qui vous permetront d'ajuster la qualité de l'image en        terme de contraste, luminosité et opacité.
 
 
-### vous pouvez télécharger le module avec npm ## "npm install glsidmodulecapture "
+#### vous pouvez télécharger le module avec npm :
+##         "npm install glsidmodulecapture "
