@@ -1,5 +1,5 @@
 # Canvas
-![](filename%20couper.png)
+![](couper.png)
 un module de capture qui permet de prendre des photos et les modifier en utilsant Canvas
 
 ## le module répond aux exigences suivantes:
